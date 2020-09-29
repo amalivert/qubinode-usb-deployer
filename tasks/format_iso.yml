@@ -1,0 +1,35 @@
+---
+- name: Create required mounting directories
+  become: yes
+  file:
+    path: 
+    state: directory
+  with_items:
+  - '/mnt/iso'
+  - '/mnt/iso_data'
+
+- name: check if RHEL iso file exists
+  stat: 
+    path: "{{ iso_img_file }}"
+  register: iso_exists
+
+- name: Copy iso data to iso_data directory
+  become: yes
+  copy:
+    src: '/mnt/iso'
+    dest: '/mnt/iso_data'
+    mode: '0644'
+  when: iso_exists
+
+- name: deploy qubinode custom kickstart files
+  become: yes
+  template:
+    src:  "{{ ks_file }}.j2"
+    dest: "/mnt/iso_data/{{ ks_file }}"
+    mode: '0644'
+
+- name: get the blkid for the usb device
+  become: yes
+  shell: >
+    /usr/sbin/blkid {{ usb_dev }} | awk ' / /{print $2}'| awk 'BEGIN { FS = "\"" } ; { print $2 }'
+  register: dev_blkid
