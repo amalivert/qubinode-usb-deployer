@@ -69,9 +69,8 @@ Example Playbook for Generic Server
         qubinode_gw: '192.168.86.1'
         qubinode_user: 'qubi'
         iso_img_file: '/root/rhel-8.2-x86_64-dvd.iso'
-        qcow_image_file: 'rhel-8.2-x86_64-kvm.qcow2'
-        qubinode_github: 'https://github.com/Qubinode/qubinode-installer/archive/'
-        git_branch_name: 'dev'
+        qcow_image_file: 'rhel-8.2-x86_64-kvm.qcow2'      
+        git_branch_name: '2.4.2'
         ks_file: 'qubinode_rhel.ks'
         ok_to_reboot: no
 ```
