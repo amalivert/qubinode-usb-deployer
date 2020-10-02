@@ -95,3 +95,4 @@
     if=/mnt/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
     of={{usb_device}} 
     status=progress
+  when: iso_exists

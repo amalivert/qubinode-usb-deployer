@@ -1,2 +1,5 @@
 ---
 # tasks file for qubinode-usb-deployer
+
+- name: deploy qubinode-usb-deployer
+  include_tasks: deploy_iso.yaml

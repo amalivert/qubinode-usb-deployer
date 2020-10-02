@@ -1,10 +1,9 @@
 ---
 # defaults file for qubinode-usb-deployer
-usb_dev: ''
+usb_device: ''
 iso_img_file: ''
 os_major_file: '8'
 os_minor_version: '2'
-root_pw: 
 root_pw: "$6$lzcUgJ886.GHT1IM$BtYRQltzadzbHtubxHC1li5yFbdvdkTeGnD2ex1H4VHwQoUGTz22UHyUondkHu/wG515sFuztuesrwC7s.Xkd/"
 set_static_ip: true
 qubinode_user_pw: "$6$hDS1K0FLywm2VIHm$c3PP8Ko9eHxYS.Lk/gRtwYzQCBlm0otDpx7UlJDuTYeK0EtUG40kS/gXKgMAaZ71NavoEsCHTnamQVCuofQh1/"
@@ -19,4 +18,4 @@ qubinode_gw: ''
 qubinode_user: 'qubi'
 ks_file: ''
 qubinode_github: 'https://github.com/Qubinode/qubinode-installer/archive/'
-git_branch_name: 'dev'
+git_branch_name: '2.2'
