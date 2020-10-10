@@ -83,8 +83,7 @@
   become: yes
   shell: >
     implantisomd5 ../QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
-  when: iso_exists
-    args:
+  args:
     chdir: /mnt/iso_data/
   when: iso_exists
 
