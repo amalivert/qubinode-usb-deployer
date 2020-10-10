@@ -16,19 +16,19 @@
   - '/mnt/iso'
   - '/mnt/iso_data'
 
-- name: check if RHEL iso file exists
+- name: Check if RHEL iso file exists
   stat: 
     path: "{{ iso_img_file }}"
   register: iso_exists
 
-- name: mount iso file
+- name: Mount iso file
   become: yes
   shell: >
     /usr/bin/mount 
     -t iso9660 
     -o loop
     {{iso_img_file}} /mnt/iso
-  when: iso_exists   
+  when: iso_exists|bool   
 
 - name: Copy iso data to iso_data directory
   become: yes
@@ -36,28 +36,28 @@
     src: '/mnt/iso'
     dest: '/mnt/iso_data'
     mode: '0644'
-  when: iso_exists
+  when: iso_exists|bool
 
-- name: deploy qubinode custom kickstart files
+- name: Deploy qubinode custom kickstart files
   become: yes
   template:
     src:  "{{ ks_file }}.j2"
-    dest: "/mnt/iso_data/ks.cfg"
+    dest: "/mnt/iso_data/iso/ks.cfg"
     mode: '0644'
-  when: iso_exists
+  when: iso_exists|bool
 
-- name: get the blkid for the usb device
+- name: Get the blkid for the usb device
   become: yes
   shell: >
     /usr/sbin/blkid {{ usb_dev }} | awk ' / /{print $2}'| awk 'BEGIN { FS = "\"" } ; { print $2 }' 
   register: dev_blkid
-  when: iso_exists
+  when: iso_exists|bool
 
 - name: Add ks and blkid to isolinux.cfg
   become: yes
   shell: >
-    /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/isolinux/isolinux.cfg
-  when: iso_exists
+    /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/iso/isolinux/isolinux.cfg
+  when: iso_exists|bool
 
 - name: Create a new bootable ISO image
   become: yes
@@ -76,8 +76,8 @@
     -no-emul-boot 
     -o ../QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso .
   args:
-    chdir: /mnt/iso_data/
-  when: iso_exists
+    chdir: /mnt/iso_data/iso/
+  when: iso_exists|bool
 
 - name: Implant a md5 checksum into the ISO image
   become: yes
@@ -94,4 +94,4 @@
     if=/mnt/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
     of={{usb_device}} 
     status=progress
-  when: iso_exists
+  when: iso_exists|bool
