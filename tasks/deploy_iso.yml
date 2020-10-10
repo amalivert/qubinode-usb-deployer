@@ -10,7 +10,7 @@
 - name: Create required mounting directories
   become: yes
   file:
-    path: 
+    path: "{{ item }}"
     state: directory
   with_items:
   - '/mnt/iso'
