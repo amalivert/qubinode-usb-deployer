@@ -2,10 +2,10 @@
 - name: Install required  packages
   become: yes
   yum:
-  name:
-    - genisoimage
-    - isomd5sum
-  state: present
+    name:
+      - genisoimage
+      - isomd5sum
+    state: present
     
 - name: Create required mounting directories
   become: yes
