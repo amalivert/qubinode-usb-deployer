@@ -26,7 +26,7 @@
 
 - fail:
     msg: "Whoops! { iso_img_file }} not found"
-  when: iso_exists is not defined
+  when: iso_exists.stat.exists == False
 
 - name: Mount iso file
   become: yes 
@@ -35,7 +35,7 @@
     -t iso9660 
     -o loop
     {{iso_img_file}} /mnt/iso
-  when: iso_exists|bool   
+  when: iso_exists.stat.exists == True  
 
 - name: Copy iso data to iso_data directory
   become: yes
@@ -43,7 +43,7 @@
     src: '/mnt/iso'
     dest: '/mnt/iso_data'
     mode: '0644'
-  when: iso_exists|bool
+  when: iso_exists.stat.exists == True
 
 - name: Deploy qubinode custom kickstart files
   become: yes
@@ -51,20 +51,20 @@
     src:  "{{ ks_file }}.j2"
     dest: "/mnt/iso_data/ks.cfg"
     mode: '0644'
-  when: iso_exists|bool
+  when: iso_exists.stat.exists == True
 
 - name: Get the blkid for the usb device
   become: yes
   shell: >
     /usr/sbin/blkid {{ usb_dev }} | awk ' / /{print $2}'| awk 'BEGIN { FS = "\"" } ; { print $2 }' 
   register: dev_blkid
-  when: iso_exists|bool
+  when: iso_exists.stat.exists == True
 
 - name: Add ks and blkid to isolinux.cfg
   become: yes
   shell: >
     /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/iso/isolinux/isolinux.cfg
-  when: iso_exists|bool
+  when: iso_exists.stat.exists == True
 
 - name: Create a new bootable ISO image
   become: yes
@@ -82,13 +82,13 @@
     -e images/efiboot.img 
     -no-emul-boot 
     -o /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso .
-  when: iso_exists|bool
+  when: iso_exists.stat.exists == True
 
 - name: Implant a md5 checksum into the ISO image
   become: yes
   shell: >
     implantisomd5 /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
-  when: iso_exists
+  when: iso_exists.stat.exists == True
 
 - name: Burn iso file to usb device
   become: yes
@@ -97,4 +97,4 @@
     if=/root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
     of={{usb_device}} 
     status=progress
-  when: iso_exists|bool
+  when: iso_exists.stat.exists == True
