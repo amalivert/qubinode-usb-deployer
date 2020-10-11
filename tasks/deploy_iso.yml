@@ -23,7 +23,7 @@
 
 - fail:
     msg: "Whoops! { iso_img_file }} not found"
-  when: st.stat.pw_name != 'root'
+  when: iso_exists is not defined
 
 - name: Mount iso file
   become: yes 
