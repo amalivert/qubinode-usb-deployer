@@ -62,9 +62,8 @@
   #   /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/isolinux/isolinux.cfg
   lineinfile:
     dest: /mnt/iso_data/isolinux/isolinux.cfg
-    insertafter: 'label linux'
-    regexp: '^append'
-    line: "append initrd=initrd.img inst.stage2=hd:UUID={{ dev_blkid }} ks=hd:UUID={{ dev_blkid }}:ks.cfg quiet"
+    regexp: '^append initrd=initrd.img'
+    line: "append initrd=initrd.img inst.stage2=hd:UUID={{ dev_blkid.stdout }} ks=hd:UUID={{ dev_blkid.stdout }}:ks.cfg quiet"
     state: present
     firstmatch: yes
 
