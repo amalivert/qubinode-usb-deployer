@@ -20,3 +20,4 @@ qubinode_user: 'qubi'
 ks_file: ''
 qubinode_github: 'https://github.com/Qubinode/qubinode-installer/archive/'
 git_branch_name: '2.2'
+enable_gnome_desktop: False
