@@ -40,7 +40,7 @@
 - name: Copy iso data to iso_data directory
   become: yes
   synchronize:
-    src: '/mnt/iso'
+    src: '/mnt/iso/'
     dest: '/mnt/iso_data'
 
 - name: Deploy qubinode custom kickstart files
