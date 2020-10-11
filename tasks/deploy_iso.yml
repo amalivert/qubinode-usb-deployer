@@ -42,7 +42,6 @@
   synchronize:
     src: '/mnt/iso'
     dest: '/mnt/iso_data'
-    mode: '0644'
   when: iso_exists.stat.exists == True
 
 - name: Deploy qubinode custom kickstart files
