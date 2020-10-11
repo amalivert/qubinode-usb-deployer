@@ -23,7 +23,6 @@
 
 - debug:
     var: iso_exists
-    verbosity: 2
 
 - fail:
     msg: "Whoops! { iso_img_file }} not found"
