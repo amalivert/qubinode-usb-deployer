@@ -20,10 +20,13 @@
   stat: 
     path: "{{ iso_img_file }}"
   register: iso_exists
-  ignore_errors: False
+
+- fail:
+    msg: "Whoops! { iso_img_file }} not found"
+  when: st.stat.pw_name != 'root'
 
 - name: Mount iso file
-  become: yes
+  become: yes 
   shell: >
     /usr/bin/mount 
     -t iso9660 
