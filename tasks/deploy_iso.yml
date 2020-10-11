@@ -58,8 +58,15 @@
 
 - name: Add ks and blkid to isolinux.cfg
   become: yes
-  shell: >
-    /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/isolinux/isolinux.cfg
+  # shell: >
+  #   /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/isolinux/isolinux.cfg
+  replace:
+    dest: /mnt/iso_data/isolinux/isolinux.cfg
+    after: 'label linux'
+    regexp: '^append'
+    line: "append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-{{os_major_version}}-{{os_minor_version}}-0-BaseOS-x86_64 ks=hd:UUID={{ dev_blkid }}:ks.cfg quiet"
+    state: present
+ 
 
 - name: Create a new bootable ISO image
   become: yes
