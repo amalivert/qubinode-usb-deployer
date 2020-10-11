@@ -56,16 +56,24 @@
     /usr/sbin/blkid {{ usb_device }} | awk ' / /{print $2}'| awk 'BEGIN { FS = "\"" } ; { print $2 }' 
   register: dev_blkid
 
-- name: Add ks and blkid to isolinux.cfg
+# - name: Add ks and blkid to isolinux.cfg
+#   become: yes
+#   # shell: >
+#   #   /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/isolinux/isolinux.cfg
+#   lineinfile:
+#     dest: /mnt/iso_data/isolinux/isolinux.cfg
+#     regexp: '^append initrd=initrd.img'
+#     line: "append initrd=initrd.img inst.stage2=hd:UUID={{ dev_blkid.stdout }} ks=hd:UUID={{ dev_blkid.stdout }}:ks.cfg quiet"
+#     state: present
+#     firstmatch: yes
+
+- name: Deploy isolinux config file
   become: yes
-  # shell: >
-  #   /usr/bin/sed -i '/^append/s/$/ ks=hd:UUID={{dev_blkid}}:ks.cfg' /mnt/iso_data/isolinux/isolinux.cfg
-  lineinfile:
-    dest: /mnt/iso_data/isolinux/isolinux.cfg
-    regexp: '^append initrd=initrd.img'
-    line: "append initrd=initrd.img inst.stage2=hd:UUID={{ dev_blkid.stdout }} ks=hd:UUID={{ dev_blkid.stdout }}:ks.cfg quiet"
-    state: present
-    firstmatch: yes
+  template:
+    src:  "isolinux.cfg.j2"
+    dest: "/mnt/iso_data/isolinux/isolinux.cfg"
+    mode: '0644'
+
 
 - name: Create a new bootable ISO image
   become: yes
