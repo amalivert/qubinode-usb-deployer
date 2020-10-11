@@ -105,13 +105,13 @@ systemctl set-default graphical.target
 {% endif %}
 %end
 
-%post --nochroot --erroronfail --log=/mnt/sysimage/root/ks-post.log
-cp -af /run/install/isodir/boot/iso/{{ qcow_image_file }} /mnt/sysimage/home/{{ qubinode_username }}/qubinode-installer/
-%end
+#%post --nochroot --erroronfail --log=/mnt/sysimage/root/ks-post.log
+#cp -af /run/install/isodir/boot/iso/{{ qcow_image_file }} /mnt/sysimage/home/{{ qubinode_username }}/qubinode-installer/
+#%end
 
-%post --nochroot --erroronfail --log=/mnt/sysimage/root/ks-post.log
-cp -af /run/install/isodir/boot/iso/{{ qcow_image_file }} /mnt/sysimage/home/{{ qubinode_username }}/qubinode-installer/
-%end
+# %post --nochroot --erroronfail --log=/mnt/sysimage/root/ks-post.log
+# cp -af /run/install/isodir/boot/iso/{{ qcow_image_file }} /mnt/sysimage/home/{{ qubinode_username }}/qubinode-installer/
+# %end
 
 %post --log=/mnt/sysimage/root/qubinode_service-post.log
 chown -Rf {{ qubinode_username }}:{{ qubinode_username }} /home/{{ qubinode_username }}/qubinode-installer
@@ -142,4 +142,4 @@ chmod u+x /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 # WantedBy=default.target
 # EOF
 # systemctl enable qubinode-installer
-%end
+#%end
