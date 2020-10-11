@@ -20,6 +20,7 @@
   stat: 
     path: "{{ iso_img_file }}"
   register: iso_exists
+  ignore_errors: False
 
 - name: Mount iso file
   become: yes
@@ -32,7 +33,7 @@
 
 - name: Copy iso data to iso_data directory
   become: yes
-  copy:
+  synchronize:
     src: '/mnt/iso'
     dest: '/mnt/iso_data'
     mode: '0644'
@@ -42,7 +43,7 @@
   become: yes
   template:
     src:  "{{ ks_file }}.j2"
-    dest: "/mnt/iso_data/iso/ks.cfg"
+    dest: "/mnt/iso_data/ks.cfg"
     mode: '0644'
   when: iso_exists|bool
 
@@ -74,24 +75,20 @@
     -eltorito-alt-boot 
     -e images/efiboot.img 
     -no-emul-boot 
-    -o ../QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso .
-  args:
-    chdir: /mnt/iso_data/iso/
+    -o /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso .
   when: iso_exists|bool
 
 - name: Implant a md5 checksum into the ISO image
   become: yes
   shell: >
-    implantisomd5 ../QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
-  args:
-    chdir: /mnt/iso_data/
+    implantisomd5 /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
   when: iso_exists
 
 - name: Burn iso file to usb device
   become: yes
   shell: >
     /usr/bin/dd 
-    if=/mnt/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
+    if=/root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
     of={{usb_device}} 
     status=progress
   when: iso_exists|bool
