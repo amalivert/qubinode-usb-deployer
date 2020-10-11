@@ -3,8 +3,9 @@
   become: yes
   yum:
     name:
-      - genisoimage
-      - isomd5sum
+      - 'genisoimage'
+      - 'isomd5sum'
+      - 'rsync'
     state: present
     
 - name: Create required mounting directories
