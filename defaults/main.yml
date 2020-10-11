@@ -2,7 +2,7 @@
 # defaults file for qubinode-usb-deployer
 usb_device: ''
 iso_img_file: ''
-os_major_file: '8'
+os_major_version: '8'
 os_minor_version: '2'
 root_pw: "$6$lzcUgJ886.GHT1IM$BtYRQltzadzbHtubxHC1li5yFbdvdkTeGnD2ex1H4VHwQoUGTz22UHyUondkHu/wG515sFuztuesrwC7s.Xkd/"
 set_static_ip: true
