@@ -21,6 +21,10 @@
     path: "{{ iso_img_file }}"
   register: iso_exists
 
+- debug:
+    var: iso_exists
+    verbosity: 2
+
 - fail:
     msg: "Whoops! { iso_img_file }} not found"
   when: iso_exists is not defined
