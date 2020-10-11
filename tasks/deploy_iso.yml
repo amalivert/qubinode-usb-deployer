@@ -85,7 +85,7 @@
     -no-emul-boot 
     -o /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso /mnt/iso_data
 
-- name: Implant a md5 checksum into the ISO image
+- name: Apply md5 checksum on ISO image
   become: yes
   shell: >
     implantisomd5 /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
@@ -97,3 +97,4 @@
     if=/root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
     of={{usb_device}} 
     status=progress
+    bs=100M
