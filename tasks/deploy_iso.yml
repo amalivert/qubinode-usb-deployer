@@ -50,11 +50,16 @@
     dest: "/mnt/iso_data/ks.cfg"
     mode: '0644'
 
-- name: Get the blkid for the usb device
+# - name: Get the blkid for the usb device
+#   become: yes
+#   shell: >
+#     /usr/sbin/blkid {{ usb_device }} | awk ' / /{print $2}'| awk 'BEGIN { FS = "\"" } ; { print $2 }' 
+#   register: dev_blkid
+
+- name: Set the label for the usb device
   become: yes
   shell: >
-    /usr/sbin/blkid {{ usb_device }} | awk ' / /{print $2}'| awk 'BEGIN { FS = "\"" } ; { print $2 }' 
-  register: dev_blkid
+    /usr/sbin/e2label {{ usb_device }} qubinode
 
 # - name: Add ks and blkid to isolinux.cfg
 #   become: yes
