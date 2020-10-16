@@ -61,13 +61,13 @@ menu separator # insert an empty line
 label linux
   menu label ^Install Red Hat Enterprise Linux {{os_major_version}}.{{os_minor_version}}
   kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=qubinode ks=hd:LABEL=qubinode:ks.cfg quiet
+  append initrd=initrd.img inst.stage2=hd:LABEL=QUBINODE-{{os_major_version}}.{{os_minor_version}} ks=hd:LABEL=QUBINODE-{{os_major_version}}.{{os_minor_version}}:ks.cfg quiet
 
 label check
   menu label Test this ^media & install Red Hat Enterprise Linux {{os_major_version}}.{{os_minor_version}}
   menu default
   kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=qubinode rd.live.check quiet
+  append initrd=initrd.img inst.stage2=hd:LABEL=QUBINODE-{{os_major_version}}.{{os_minor_version}} rd.live.check quiet
 
 menu separator # insert an empty line
 
@@ -77,7 +77,7 @@ menu begin ^Troubleshooting
 
 label vesa
   menu indent count 5
-  menu label Install Red Hat Enterprise Linux 8.2 in ^basic graphics mode
+  menu label Install Red Hat Enterprise Linux QUBINODE-{{os_major_version}}.{{os_minor_version}} in ^basic graphics mode
   text help
 	Try this option out if you're having trouble installing
 	Red Hat Enterprise Linux {{os_major_version}}.{{os_minor_version}}.
