@@ -43,7 +43,7 @@
 - name: Change ownership of usb_stick files and directories
   become: yes
   file:
-    dest: /root/usb_stick
+    path: /root/usb_stick
     mode: 0644
     recursive: true
 
