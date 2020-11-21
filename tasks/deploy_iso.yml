@@ -6,6 +6,7 @@
       - 'genisoimage'
       - 'isomd5sum'
       - 'rsync'
+      - 'syslinux'
     state: present
     
 - name: Create required mounting directories
