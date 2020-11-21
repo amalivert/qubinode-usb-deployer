@@ -45,7 +45,7 @@
   file:
     path: /root/usb_stick
     mode: 0644
-    recursive: true
+    recurse: true
 
 - name: Deploy qubinode custom kickstart files
   become: yes
