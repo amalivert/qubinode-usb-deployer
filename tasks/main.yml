@@ -2,7 +2,7 @@
 # tasks file for qubinode-usb-deployer
 
 - name: setup qubinode-usb-deployer
-  include_tasks: deploy_iso.yml
+  include_tasks: setup.yml
 
 - name: deploy qubinode-usb-deployer
-  include_tasks: setup.yml
+  include_tasks: deploy_iso.yml
