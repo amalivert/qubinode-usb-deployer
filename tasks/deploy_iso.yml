@@ -1,5 +1,5 @@
 ---
-- name: Install required  packages
+- name: Install required packages
   become: yes
   yum:
     name:
@@ -11,11 +11,8 @@
 - name: Create required mounting directories
   become: yes
   file:
-    path: "{{ item }}"
+    path: /root/usb_stick
     state: directory
-  with_items:
-  - '/mnt/iso'
-  - '/mnt/iso_data'
 
 - name: Check if RHEL iso file exists
   stat: 
@@ -35,19 +32,26 @@
     /usr/bin/mount 
     -t iso9660 
     -o loop
-    {{iso_img_file}} /mnt/iso
+    /media/
 
 - name: Copy iso data to iso_data directory
   become: yes
   synchronize:
-    src: '/mnt/iso/'
-    dest: '/mnt/iso_data'
+    src: '/media/isolinux'
+    dest: '/root/usb_stick'
+
+- name: Change ownership of usb_stick files and directories
+  become: yes
+  file:
+    dest: /root/usb_stick
+    mode: u+w
+    recursive: true
 
 - name: Deploy qubinode custom kickstart files
   become: yes
   template:
     src:  "{{ ks_file }}.j2"
-    dest: "/mnt/iso_data/ks.cfg"
+    dest: "/root/usb_stick/ks.cfg"
     mode: '0644'
 
 # - name: Get the blkid for the usb device
@@ -76,37 +80,61 @@
   become: yes
   template:
     src:  "isolinux.cfg.j2"
-    dest: "/mnt/iso_data/isolinux/isolinux.cfg"
+    dest: "/root/usb_stick/isolinux/isolinux.cfg"
     mode: '0644'
 
-
-- name: Create a new bootable ISO image
+- name: Create qubinode iso image
   become: yes
   shell: >
-    /usr/bin/genisoimage -U -r -v -T -J -joliet-long 
-    -V "QUBINODE-{{os_major_version}}.{{os_minor_version}}" 
-    -volset "QUBINODE-{{os_major_version}}.{{os_minor_version}}" 
-    -A "QUBINODE-{{os_major_version}}.{{os_minor_version}}" 
-    -b isolinux/isolinux.bin 
-    -c isolinux/boot.cat 
+    /usr/bin/mkisofs
+    -allow-limited-size -o usb_stick.iso
+    -b isolinux/isolinux.bin
+    -c isolinux/boot.cat
     -no-emul-boot 
-    -boot-load-size 4 
+    -V "RHEL-{{os_major_version}}-{{os_major_version}}-0-BaseOS-x86_64"
+    -boot-load-size 4
     -boot-info-table 
-    -eltorito-alt-boot 
-    -e images/efiboot.img 
-    -no-emul-boot 
-    -o /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso /mnt/iso_data
-
-- name: Apply md5 checksum on ISO image
-  become: yes
-  shell: >
-    implantisomd5 /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
+    -r -T -J usb_stick && isohybrid -v /root/usb_stick.iso
+  args:
+    chdir: /root/
 
 - name: Burn iso file to usb device
   become: yes
   shell: >
-    /usr/bin/dd 
-    if=/root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
-    of={{usb_device}} 
-    status=progress
-    bs=100M
+    
+- name: Copy qubinode iso file to usb device
+  become: yes
+  synchronize:
+    src: '/root/usb_stick.iso'
+    dest:  "{{ usb_device }} "
+
+# - name: Create a new bootable ISO image
+#   become: yes
+#   shell: >
+#     /usr/bin/genisoimage -U -r -v -T -J -joliet-long 
+#     -V "QUBINODE-{{os_major_version}}.{{os_minor_version}}" 
+#     -volset "QUBINODE-{{os_major_version}}.{{os_minor_version}}" 
+#     -A "QUBINODE-{{os_major_version}}.{{os_minor_version}}" 
+#     -b isolinux/isolinux.bin 
+#     -c isolinux/boot.cat 
+#     -no-emul-boot 
+#     -boot-load-size 4 
+#     -boot-info-table 
+#     -eltorito-alt-boot 
+#     -e images/efiboot.img 
+#     -no-emul-boot 
+#     -o /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso /mnt/iso_data
+
+# - name: Apply md5 checksum on ISO image
+#   become: yes
+#   shell: >
+#     implantisomd5 /root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso
+
+# - name: Burn iso file to usb device
+#   become: yes
+#   shell: >
+#     /usr/bin/dd 
+#     if=/root/QUBINODE-{{os_major_version}}.{{os_minor_version}}.iso 
+#     of={{usb_device}} 
+#     status=progress
+#     bs=100M

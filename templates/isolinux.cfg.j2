@@ -58,16 +58,22 @@ menu tabmsg Press Tab for full configuration options on menu items.
 menu separator # insert an empty line
 menu separator # insert an empty line
 
-label linux
-  menu label ^Install Red Hat Enterprise Linux {{os_major_version}}.{{os_minor_version}}
-  kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=QUBINODE-{{os_major_version}}.{{os_minor_version}} ks=hd:LABEL=QUBINODE-{{os_major_version}}.{{os_minor_version}}:ks.cfg quiet
-
-label check
-  menu label Test this ^media & install Red Hat Enterprise Linux {{os_major_version}}.{{os_minor_version}}
+label server
+  menu label Install Qubinode on {{os_major_version}}.{{os_major_version}} ^Server
   menu default
   kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=QUBINODE-{{os_major_version}}.{{os_minor_version}} rd.live.check quiet
+  append initrd=initrd.img inst.ks=hd:LABEL=RHEL-{{os_major_version}}-{{os_major_version}}-0-BaseOS-x86_64:/{{ks_file}} inst.stage2=hd:LABEL=RHEL-{{os_major_version}}-{{os_major_version}}-0-BaseOS-x86_64 quiet
+
+label linux
+  menu label ^Install Red Hat Enterprise Linux 8.2
+  kernel vmlinuz
+  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 quiet
+
+label check
+  menu label Test this ^media & install Red Hat Enterprise Linux 8.2
+  menu default
+  kernel vmlinuz
+  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 rd.live.check quiet
 
 menu separator # insert an empty line
 
@@ -77,13 +83,13 @@ menu begin ^Troubleshooting
 
 label vesa
   menu indent count 5
-  menu label Install Red Hat Enterprise Linux QUBINODE-{{os_major_version}}.{{os_minor_version}} in ^basic graphics mode
+  menu label Install Red Hat Enterprise Linux 8.2 in ^basic graphics mode
   text help
 	Try this option out if you're having trouble installing
-	Red Hat Enterprise Linux {{os_major_version}}.{{os_minor_version}}.
+	Red Hat Enterprise Linux 8.2.
   endtext
   kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-{{os_major_version}}-{{os_minor_version}}-0-BaseOS-x86_64 nomodeset quiet
+  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 nomodeset quiet
 
 label rescue
   menu indent count 5
@@ -93,7 +99,7 @@ label rescue
 	and edit config files to try to get it booting again.
   endtext
   kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-{{os_major_version}}-{{os_minor_version}}-0-BaseOS-x86_64 rescue quiet
+  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 rescue quiet
 
 label memtest
   menu label Run a ^memory test
