@@ -31,7 +31,7 @@
   shell: >
     /usr/bin/mount 
     -t iso9660 
-    -o loop
+    -o loop "{{ iso_img_file }}"
     /media/
 
 - name: Copy iso data to iso_data directory
