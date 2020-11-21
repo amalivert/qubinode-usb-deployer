@@ -68,10 +68,12 @@ Example Playbook for Generic Server
         qubinode_hostname: 'qubinode-box.example.com'
         qubinode_gw: '192.168.86.1'
         qubinode_user: 'qubi'
-        iso_img_file: '/root/rhel-8.2-x86_64-dvd.iso'
+        iso_dir:'/root'
         os_major_version: '8'
         os_minor_version: '2'
-        os_disk: 'sda'    
+        iso_img_file: "rhel-8.2-x86_64-dvd.iso"
+        iso_boot_file: "rhel-8.2-x86_64-boot.iso"
+        os_disk: 'sda'
         git_branch_name: '2.4.2'
         ks_file: 'qubinode_rhel.ks'
         ok_to_reboot: no
@@ -103,7 +105,9 @@ Example Playbook for Generic Server
         qubinode_hostname: 'qubinode-box.example.com'
         qubinode_gw: '192.168.86.1'
         qubinode_user: 'qubi'
-        iso_img_file: '/root/rhel-8.2-x86_64-dvd.iso'
+        iso_dir: '/root'
+        iso_img_file: "rhel-8.2-x86_64-dvd.iso"
+        iso_boot_file: "rhel-8.2-x86_64-boot.iso"
         os_major_version: '8'
         os_minor_version: '2'
         os_disk: 'sda' 

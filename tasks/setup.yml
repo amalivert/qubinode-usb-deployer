@@ -1,0 +1,67 @@
+---
+- name: Install required packages
+  become: yes
+  yum:
+    name:
+      - 'genisoimage'
+      - 'isomd5sum'
+      - 'rsync'
+      - 'syslinux'
+    state: present
+    
+- name: Create required mounting directories
+  become: yes
+  file:
+    path: /root/usb_stick
+    state: directory
+
+- name: Check if RHEL iso file exists
+  stat: 
+    path: "{{ iso_img_file }}"
+  register: iso_exists
+
+- debug:
+    var: iso_exists
+
+- fail:
+    msg: "Whoops! {{ iso_img_file }} not found"
+  when: iso_exists.stat.exists == False
+
+- name: Check if RHEL boot iso file exists
+  stat: 
+    path: "{{ iso_boot_file }}"
+  register: iso_boot_exists
+
+- debug:
+    var: iso_boot_exists
+
+- fail:
+    msg: "Whoops! {{ iso_boot_file }} not found"
+  when: iso_boot_exists.stat.exists == False
+
+- name: Mount boot iso file
+  become: yes 
+  shell: >
+    /usr/bin/mount 
+    -t iso9660 
+    -o loop "{{ iso_boot_file }}"
+    /media/
+
+- name: Copy boot iso data to usb_stick directory
+  become: yes
+  synchronize:
+    src: '/media/isolinux'
+    dest: '/root/usb_stick'
+
+- name: Copy {{ iso_img_file }} to usb_stick directory
+  become: yes
+  synchronize:
+    src: "{{iso_dir}}/{{iso_img_file}}"
+    dest: '/root/usb_stick'
+ 
+- name: Change ownership of usb_stick files and directories
+  become: yes
+  file:
+    path: /root/usb_stick
+    mode: 0644
+    recurse: true

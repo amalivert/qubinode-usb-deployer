@@ -1,7 +1,9 @@
 ---
 # defaults file for qubinode-usb-deployer
 usb_device: ''
+iso_dir: ''
 iso_img_file: ''
+iso_boot_file: ''
 os_major_version: '8'
 os_minor_version: '2'
 os_disk: 'sda'
