@@ -1,0 +1,6 @@
+---
+- name: Unmount /media
+  become: yes
+  mount:
+    path: '/media'
+    state: unmounted

@@ -35,8 +35,8 @@ Role Variables
 | qubinode_gw | | qubinode host default network gateway
 | qubinode_nameserver_ip | default = '1.1.1.1' | DNS server for qubinode server |
 | qubinode_net_dev | | qubinode network device(exanple: 'eno1')
-| qubinode_netmask | | qubinode host default network netmask(example: '255.255.255.0) |
-| rhel_iso_dir | | location  of rhel-server-7.7-x86_64-dvd.iso (example: '/home/qubiuser/rhel-server-7.7-x86_64-dvd.iso') |
+| qubinode_netmask | | qubinode host default network netmask(example: '255.255.255.0') |
+| rhel_iso_dir | | location  of all images (example: '/home/qubiuser/rhel-server-7.7-x86_64-dvd.iso') |
 | root_pw | | root password for qubinode box
 | usb_device | | example: '/dev/sdc' |
 | enable_gnome_desktop  | false  |  Set to true if you would like to install gnome desktop.  |
@@ -45,6 +45,7 @@ Role Variables
 | qubinode_user_fullname | default = 'Qubi Admin'| qubinode admin user full name |
 | ok_to_reboot | default = 'no' | reboot your workstation/host if partprobe fails |
 | os_disk | default = 'sda' | the name of the first disk on your device where the os gets installed |
+| qcow_image_file | the name of the qcow file (example:rhel-8.2-x86_64-kvm.qcow2 )
 
 Example Playbook for Generic Server
 ----------------
@@ -73,6 +74,7 @@ Example Playbook for Generic Server
         os_minor_version: '2'
         iso_img_file: "rhel-8.2-x86_64-dvd.iso"
         iso_boot_file: "rhel-8.2-x86_64-boot.iso"
+        qcow_image_file: "rhel-8.2-x86_64-qcow.iso"
         os_disk: 'sda'
         git_branch_name: '2.4.2'
         ks_file: 'qubinode_rhel.ks'
@@ -108,6 +110,7 @@ Example Playbook for Generic Server
         iso_dir: '/root'
         iso_img_file: "rhel-8.2-x86_64-dvd.iso"
         iso_boot_file: "rhel-8.2-x86_64-boot.iso"
+        qcow_image_file: "rhel-8.2-x86_64-kvm.qcow2"
         os_major_version: '8'
         os_minor_version: '2'
         os_disk: 'sda' 

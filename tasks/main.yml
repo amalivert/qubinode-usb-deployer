@@ -6,3 +6,6 @@
 
 - name: deploy qubinode-usb-deployer
   include_tasks: deploy_iso.yml
+
+- name: cleanup qubinode-usb-deployer
+  include_tasks: cleanup.yml

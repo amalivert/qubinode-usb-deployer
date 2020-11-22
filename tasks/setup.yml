@@ -12,32 +12,25 @@
 - name: Create required mounting directories
   become: yes
   file:
-    path: /root/usb_stick
+    path: "{{iso_dir}}/usb_stick"
     state: directory
 
-- name: Check if RHEL iso file exists
-  stat: 
-    path: "{{ iso_img_file }}"
-  register: iso_exists
+- name: Check if required image file exists
+  block:
+    - stat: 
+      path: "{{iso_dir}}/{{ item }}"
+      register: iso_exists
+    
+    - debug:
+      var: iso_exists
 
-- debug:
-    var: iso_exists
-
-- fail:
-    msg: "Whoops! {{ iso_img_file }} not found"
-  when: iso_exists.stat.exists == False
-
-- name: Check if RHEL boot iso file exists
-  stat: 
-    path: "{{ iso_boot_file }}"
-  register: iso_boot_exists
-
-- debug:
-    var: iso_boot_exists
-
-- fail:
-    msg: "Whoops! {{ iso_boot_file }} not found"
-  when: iso_boot_exists.stat.exists == False
+    - fail:
+      msg: "Whoops! {{ item }} not found"
+      when: iso_exists.stat.exists == False
+  loop:
+   - "{{iso_img_file}}"
+   - "{{iso_boot_file}}"
+   - "{{qcow_image_file}}"
 
 - name: Mount boot iso file
   become: yes 
@@ -59,6 +52,12 @@
     src: "{{iso_dir}}/{{iso_img_file}}"
     dest: '/root/usb_stick'
  
+- name: Copy RHEL qcow file to usb device
+  become: yes
+  copy:
+    src: "{{iso_dir}}/{{qcow_image_file}}"
+    dest: '/root/usb_stick'
+
 - name: Change ownership of usb_stick files and directories
   become: yes
   file:

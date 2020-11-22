@@ -64,16 +64,16 @@ label server
   kernel vmlinuz
   append initrd=initrd.img inst.ks=hd:LABEL=qubinode:/ks.cfg inst.stage2=hd:LABEL=qubinode:/{{iso_img_file}}
 
-label linux
-  menu label ^Install Red Hat Enterprise Linux 8.2
-  kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 quiet
-
-label check
-  menu label Test this ^media & install Red Hat Enterprise Linux 8.2
-  menu default
-  kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 rd.live.check quiet
+#label linux
+#  menu label ^Install Red Hat Enterprise Linux 8.2
+#  kernel vmlinuz
+#  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 quiet
+#
+#label check
+#  menu label Test this ^media & install Red Hat Enterprise Linux 8.2
+#  menu default
+#  kernel vmlinuz
+#  append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-8-2-0-BaseOS-x86_64 rd.live.check quiet
 
 menu separator # insert an empty line
 
