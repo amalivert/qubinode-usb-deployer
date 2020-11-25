@@ -7,13 +7,20 @@ Requirements
 ------------
 
 - RHEL Server ISO
+- RHEL Boot iso
+- Rhel Qcow imager
+- OpenShift pull secret
 
 
 Download ISO
 ------------
-* [Red Hat Enterprise Linux 7.6 Binary DVD](https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.6/x86_64/product-software)
-* [Red Hat Enterprise Linux 7.7 Binary DVD](https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.7/x86_64/product-software)
-* [Red Hat Enterprise Linux 7.8 Beta Binary DVD](https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.8%20Beta/x86_64/product-software)
+* [Red Hat Enterprise Linux 8.2 Binary DVD](https://access.redhat.com/downloads/content/479/ver=/rhel---8/8.3/x86_64/product-software)
+* [Red Hat Enterprise Linux 8.2 Boot ISO](https://access.redhat.com/downloads/content/479/ver=/rhel---8/8.3/x86_64/product-software)
+* [Red Hat Enterprise Linux 8.2 KVM Guest Image ](https://access.redhat.com/downloads/content/479/ver=/rhel---8/8.3/x86_64/product-software)
+
+Download pull-secret
+--------------------
+* [OpenShift Cluster Manager](https://cloud.redhat.com/openshift/install)
 
 Creating SHA-512 password for qubinode_user_pw and root_pw
 ------------
@@ -46,7 +53,7 @@ Role Variables
 | ok_to_reboot | default = 'no' | reboot your workstation/host if partprobe fails |
 | os_disk | default = 'sda' | the name of the first disk on your device where the os gets installed |
 | qcow_image_file | the name of the qcow file (example:rhel-8.2-x86_64-kvm.qcow2 )
-
+| pull_secret_file | The location of the file with the pull-secret downloaded from cloud.redhat.com |
 Example Playbook for Generic Server
 ----------------
 ```
@@ -75,6 +82,7 @@ Example Playbook for Generic Server
         iso_img_file: "rhel-8.2-x86_64-dvd.iso"
         iso_boot_file: "rhel-8.2-x86_64-boot.iso"
         qcow_image_file: "rhel-8.2-x86_64-qcow.iso"
+        pull_secret_file: '/root/pull-secret.txt'
         os_disk: 'sda'
         git_branch_name: '2.4.2'
         ks_file: 'qubinode_rhel.ks'
@@ -111,6 +119,7 @@ Example Playbook for Generic Server
         iso_img_file: "rhel-8.2-x86_64-dvd.iso"
         iso_boot_file: "rhel-8.2-x86_64-boot.iso"
         qcow_image_file: "rhel-8.2-x86_64-kvm.qcow2"
+        pull_secret_file: '/root/pull-secret.txt'
         os_major_version: '8'
         os_minor_version: '2'
         os_disk: 'sda' 

@@ -2,6 +2,7 @@
 # defaults file for qubinode-usb-deployer
 usb_device: ''
 iso_dir: ''
+pull_secret_file: ''
 iso_img_file: ''
 iso_boot_file: ''
 qcow_image_file: ''

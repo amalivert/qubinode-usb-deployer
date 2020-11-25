@@ -58,6 +58,13 @@
     src: "{{iso_dir}}/{{qcow_image_file}}"
     dest: '/root/usb_stick'
 
+ 
+- name: Copy OCP Cluster Manager pull secret file to usb device
+  become: yes
+  copy:
+    src: "{{iso_dir}}/{{pull_secret_file}}"
+    dest: '/root/usb_stick/pull-secret.txt'
+
 - name: Change ownership of usb_stick files and directories
   become: yes
   file:
