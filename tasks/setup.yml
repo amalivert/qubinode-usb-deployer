@@ -16,21 +16,7 @@
     state: directory
 
 - name: Check if required image file exists
-  block:
-    - stat: 
-      path: "{{iso_dir}}/{{ item }}"
-      register: iso_exists
-    
-    - debug:
-      var: iso_exists
-
-    - fail:
-      msg: "Whoops! {{ item }} not found"
-      when: iso_exists.stat.exists == False
-  loop:
-   - "{{iso_img_file}}"
-   - "{{iso_boot_file}}"
-   - "{{qcow_image_file}}"
+  include_tasks: required_files.yml
 
 - name: Mount boot iso file
   become: yes 
