@@ -4,9 +4,6 @@
     path: "{{iso_dir}}/{{iso_img_file}}"
   register: iso_image_exists
     
-- debug:
-  var: iso_image_exists
-
 - fail:
     msg: "Whoops! {{iso_img_file}} not found"
   when: iso_image_exists.stat.exists == False
@@ -15,9 +12,6 @@
   stat: 
     path: "{{iso_dir}}/{{iso_boot_file}}"
   register: iso_boot_exists
-    
-- debug:
-  var: iso_boot_exists
 
 - fail:
     msg: "Whoops! {{iso_boot_file}} not found"
@@ -28,9 +22,6 @@
     path: "{{iso_dir}}/{{qcow_image_file}}"
   register: qcow_image_exists
     
-- debug:
-  var: qcow_image_exists
-
 - fail:
     msg: "Whoops! {{qcow_image_file}} not found"
   when: qcow_image_exists.stat.exists == False
