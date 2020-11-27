@@ -93,7 +93,7 @@ rm -f {{ git_branch_name }}.zip
 cd qubinode-installer/
 mkdir -p /tmp/mnt
 usbblkid=$(blkid  | grep 'LABEL="qubinode"' | awk '{print $1}' | tr -d :)
-mount $usbblkid /tmp/mnt
+mount -o remount,rw $usbblkid /tmp/mnt
 ls -lath /tmp/mnt/
 cp -af /tmp/mnt/{{ qcow_image_file }} /home/{{ qubinode_username }}/qubinode-installer/{{ qcow_image_file }}
 cp -af /tmp/mnt/pull-secret.txt /home/{{ qubinode_username }}/qubinode-installer
