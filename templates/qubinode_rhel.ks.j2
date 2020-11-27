@@ -93,13 +93,14 @@ rm -f {{ git_branch_name }}.zip
 cd qubinode-installer/
 mkdir -p /tmp/mnt
 usbblkid=$(blkid  | grep 'LABEL="qubinode"' | awk '{print $1}' | tr -d :)
-mount -o remount,rw $usbblkid /tmp/mnt
+vgchange -ay
+mount -o remount $usbblkid /tmp/mnt
 ls -lath /tmp/mnt/
 cp -af /tmp/mnt/{{ qcow_image_file }} /home/{{ qubinode_username }}/qubinode-installer/{{ qcow_image_file }}
-cp -af /tmp/mnt/pull-secret.txt /home/{{ qubinode_username }}/qubinode-installer
+cp -af /tmp/mnt/pull-secret.txt /home/{{ qubinode_username }}/qubinode-installer/pull-secret.txt
 umount /tmp/mnt
 chown -R {{ qubinode_username }}:{{ qubinode_username }} /home/{{ qubinode_username }}/qubinode-installer
-chmod u+x /home/{{ qubinode_username }}/qubinode-installer
+chmod u+x /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 
 {%if enable_gnome_desktop %}
 systemctl set-default graphical.target
@@ -109,7 +110,7 @@ systemctl set-default graphical.target
 %post --log=/root/qubinode-installer-script.log --interpreter /bin/bash
 printf "Changing output to TTY 3; press Alt-F3 to view\r\n" > /dev/tty1
 {
-    ./home/{{ qubinode_username }}/qubinode-installer
+    ./home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 }
 
 %end
