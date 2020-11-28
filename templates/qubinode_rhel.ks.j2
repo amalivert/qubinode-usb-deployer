@@ -100,6 +100,6 @@ chown -R {{ qubinode_username }}:{{ qubinode_username }} /home/{{ qubinode_usern
 chmod u+x /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 printf "Changing output to TTY 3; press Alt-F3 to view\r\n" > /dev/tty1
 {
-    ./home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
+    /bin/su -c "./home/{{ qubinode_username }}/qubinode-installer/qubinode-installer" qubi
 }
 %end
