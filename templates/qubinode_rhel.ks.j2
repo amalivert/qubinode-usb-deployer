@@ -8,8 +8,8 @@ repo --name="Server-ResilientStorage" --baseurl=file:///run/install/repo/addons/
 text
 {% elif os_major_version == '8' %}
 repo --name="AppStream" --baseurl=file:///run/install/repo/AppStream
-# Use grapical mode install
-graphical
+# Use text mode install
+text
 {%endif%}
 # Use CDROM installation media
 cdrom
@@ -97,9 +97,10 @@ cp -af /run/install/isodir/pull-secret.txt /mnt/sysimage/home/{{ qubinode_userna
 
 %post --erroronfail --log=/root/qubinode-installer-script.log --interpreter /bin/bash
 chown -R {{ qubinode_username }}:{{ qubinode_username }} /home/{{ qubinode_username }}/qubinode-installer
+sudo su - {{ qubinode_username }}
 chmod u+x /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 printf "Changing output to TTY 3; press Alt-F3 to view\r\n" > /dev/tty1
 {
-    /bin/su -c "./home/{{ qubinode_username }}/qubinode-installer/qubinode-installer" qubi
+    ./home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 }
 %end
