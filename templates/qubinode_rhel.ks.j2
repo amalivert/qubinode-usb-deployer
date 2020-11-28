@@ -89,35 +89,31 @@ cp -af /run/install/isodir/{{ qcow_image_file }} /mnt/sysimage/home/{{ qubinode_
 cp -af /run/install/isodir/pull-secret.txt /mnt/sysimage/home/{{ qubinode_username }}/qubinode-installer/
 %end
 
-%post --log=/mnt/sysimage/root/qubinode_service-post.log
+%post --log=/root/qubinode_service-post.log
 chown -Rf {{ qubinode_username }}:{{ qubinode_username }} /home/{{ qubinode_username }}/qubinode-installer
 chmod u+x /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
 cat > /etc/systemd/system/qubinode-installer.service << EOF
 [Unit]
 Description=Run qubinode installer at first boot
-After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service
-Before=getty@tty6.service gdm.service
-After=getty@tty6.service gdm.service
+After=systemd-remount-fs.service
+Before=systemd-sysusers.service sysinit.target shutdown.target
+ConditionPathIsReadWrite=/etc
+ConditionFirstBoot=yes
 
 [Service]
 Type=oneshot
 User={{ qubinode_username }}
 RemainAfterExit=yes
-TTYPath=/dev/tty6
-ExecStartPre=/usr/bin/sleep 5
-ExecStartPre=/usr/bin/chvt 6
-#ExecStartPre=/usr/bin/clear
-ExecStart=/home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
-#ExecStopPost=/usr/bin/chvt 1
-TimeoutSec=0
+ExecStartPre=/usr/bin/clear
+ExecStart=/home/{{ qubinode_username }}/qubinode-installer/qubinode-installer --prompt
 StandardOutput=tty
 StandardInput=tty
 StandardError=tty
 
 [Install]
-WantedBy=default.target
+WantedBy=sysinit.target
 EOF
-systemctl restart qubinode-installer
+systemctl --user enable qubinode-installer.service
 %end
 
 %anaconda
