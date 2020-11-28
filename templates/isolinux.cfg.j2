@@ -59,7 +59,7 @@ menu separator # insert an empty line
 menu separator # insert an empty line
 
 label server
-  menu label Install Qubinode on {{os_major_version}}.{{os_minor_version}} ^Server
+  menu label Install Qubinode on RHEL {{os_major_version}}.{{os_minor_version}} ^Server
   menu default
   kernel vmlinuz
   append initrd=initrd.img inst.ks=hd:LABEL=qubinode:/ks.cfg inst.stage2=hd:LABEL=qubinode:/{{iso_img_file}}
