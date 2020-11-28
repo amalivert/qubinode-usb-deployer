@@ -89,31 +89,38 @@ cp -af /run/install/isodir/{{ qcow_image_file }} /mnt/sysimage/home/{{ qubinode_
 cp -af /run/install/isodir/pull-secret.txt /mnt/sysimage/home/{{ qubinode_username }}/qubinode-installer/
 %end
 
-%post --log=/root/qubinode_service-post.log
+%post --log=/root/runonce_service-post.log
 chown -Rf {{ qubinode_username }}:{{ qubinode_username }} /home/{{ qubinode_username }}/qubinode-installer
 chmod u+x /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
-cat > /etc/systemd/system/qubinode-installer.service << EOF
+cat << EOF > /etc/systemd/system/runonce.service
 [Unit]
-Description=Run qubinode installer at first boot
-After=systemd-remount-fs.service
-Before=systemd-sysusers.service sysinit.target shutdown.target
-ConditionPathIsReadWrite=/etc
-ConditionFirstBoot=yes
+Description=Run once
+Requires=network-online.target
+After=network-online.target
 
 [Service]
-Type=oneshot
-User={{ qubinode_username }}
-RemainAfterExit=yes
-ExecStartPre=/usr/bin/clear
-ExecStart=/home/{{ qubinode_username }}/qubinode-installer/qubinode-installer --prompt
-StandardOutput=tty
-StandardInput=tty
-StandardError=tty
+ExecStart=/root/runonce.sh
 
 [Install]
-WantedBy=sysinit.target
+WantedBy=multi-user.target
 EOF
-systemctl --user enable qubinode-installer.service
+
+chmod 664 /etc/systemd/system/runonce.service
+systemctl enable runonce
+%end
+
+%post --log=/root/qubinode-start-installer-post.log
+
+#!/bin/bash
+
+if [ -e /tmp/runonce ]
+then
+   rm /tmp/runonce
+   exec > /root/runonce.log 2>&1
+   sudo -u {{ qubinode_username }} /home/{{ qubinode_username }}/qubinode-installer/qubinode-installer
+fi
+
+exit
 %end
 
 %anaconda
@@ -121,4 +128,3 @@ pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
 pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
 pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
 %end
-
